@@ -21,6 +21,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
 
+        //initialize starting 9 images, these images represent my hobbies and passions
         ImageView img1 = new ImageView(new Image("Images/chess.jpg"));
         img1.setFitHeight(250);
         img1.setFitWidth(300);
@@ -57,6 +58,7 @@ public class Main extends Application {
         img9.setFitHeight(250);
         img9.setFitWidth(300);
 
+        //add the images to the arraylist for future use
         imageNames.add(img1);
         imageNames.add(img2);
         imageNames.add(img3);
@@ -68,7 +70,7 @@ public class Main extends Application {
         imageNames.add(img9);
 
 
-
+        //start the main stage on which the program will run, and pass the arraylist of image names as well
         main(primaryStage, imageNames);
 
     }
@@ -82,24 +84,25 @@ public class Main extends Application {
         int width = 1020;
         int height = 950;
 
-
+        //this is arraylist will be represeting togglebuttons placed behind the imageviews, that way we can select the images
         ArrayList<ToggleButton> toggleButtons = new ArrayList<>();
 
-
-        for(int i = 0; i < imageNames.size(); i++) {
-            toggleButtons.add(new ToggleButton("", imageNames.get(i)));
-            toggleButtons.get(i).setStyle("-fx-background-color:white");
+        //we need to make sure we have the right number of buttons depending on the size of the arraylist
+        for(int i = 0; i < imageNames.size(); i++) { //loop through the imagename arraylist
+            toggleButtons.add(new ToggleButton("", imageNames.get(i))); //instantiate a new togglebutton
+            toggleButtons.get(i).setStyle("-fx-background-color:white"); //make sure its background fits the color of the application
             int a = i;
             toggleButtons.get(i).setOnAction(actionEvent -> {
-                if(toggleButtons.get(a).isSelected())
-                    toggleButtons.get(a).setStyle("-fx-background-color:lightskyblue");
-                else
-                    toggleButtons.get(a).setStyle("-fx-background-color:white");
+                if(toggleButtons.get(a).isSelected())   //check if the toggle is on
+                    toggleButtons.get(a).setStyle("-fx-background-color:lightskyblue"); //if image is selected, we want to change the outer border to blue
+                else //if toggle is false
+                    toggleButtons.get(a).setStyle("-fx-background-color:white"); //if the iamge is not selected, we want to change the color back to white
             });
             toggleButtons.get(i).setPrefSize(320,270);
         }
 
 
+        //we add a few functional buttons here
         Button addImage = new Button("Add Image");
         addImage.setStyle("-fx-background-color:white");
 
@@ -112,7 +115,7 @@ public class Main extends Application {
         Button deselectAll = new Button("Deselect All Images");
         deselectAll.setStyle("-fx-background-color:white");
 
-        HBox hBox = new HBox(20, addImage, deleteSelectedImages,selectAll, deselectAll);
+        HBox hBox = new HBox(20, addImage, deleteSelectedImages,selectAll, deselectAll); //add the buttons to a horizontal layout box
         hBox.setStyle("-fx-background-color:lightskyblue");
         hBox.setAlignment(Pos.BASELINE_CENTER);
         hBox.setPadding(new Insets(20,0,20,0));
@@ -124,7 +127,7 @@ public class Main extends Application {
         addImage.setOnAction(actionEvent ->  {
             FileChooser fileChooser = new FileChooser();
 
-            fileChooser.getExtensionFilters().addAll(
+            fileChooser.getExtensionFilters().addAll( //make sure we have as many image extensions as possible, we don't need to check whether the user selected an image
                     new FileChooser.ExtensionFilter("Text Files", "*.jpg")
                     ,new FileChooser.ExtensionFilter("HTML Files", "*.png")
                     ,new FileChooser.ExtensionFilter("HTML Files", "*.jpeg"));
@@ -132,13 +135,13 @@ public class Main extends Application {
 
             List<File> list = fileChooser.showOpenMultipleDialog(primaryStage);
             try {
-                if (list != null) {
+                if (list != null) { //we loop through the list of images the user selected
                     for (File file : list) {
-                        ImageView temp = new ImageView(file.toURI().toString());
+                        ImageView temp = new ImageView(file.toURI().toString()); //create an imageview
                         temp.setFitHeight(250);
                         temp.setFitWidth(300);
-                        imageNames.add(temp);
-                        main(primaryStage, imageNames);
+                        imageNames.add(temp); //add it to the arraylist
+                        main(primaryStage, imageNames); //rerun the main method, thus adding the image to the repository
                     }
                 }
 
@@ -147,47 +150,47 @@ public class Main extends Application {
         });
 
         deleteSelectedImages.setOnAction(actionEvent -> {
-            ImageView[] temp = new ImageView[imageNames.size()];
-            for(int x = 0; x < imageNames.size(); x++){
+            ImageView[] temp = new ImageView[imageNames.size()]; //because we're dealing with an arraylist, deleting images becomes difficult. It's easier to use a regular array
+            for(int x = 0; x < imageNames.size(); x++){ //convert arraylist into a temporary array
                temp[x] = imageNames.get(x);
             }
-            for(int x = 0; x<temp.length; x++){
+            for(int x = 0; x<temp.length; x++){ //remove selected images
                 if(toggleButtons.get(x).isSelected())
                     temp[x] = null;
             }
-            imageNames.removeAll(imageNames);
+            imageNames.removeAll(imageNames); //convert the array back into the arraylist
             for(int x = 0; x < temp.length; x++){
                 if(temp[x]!=null)
                     imageNames.add(temp[x]);
             }
 
-            main(primaryStage, imageNames);
+            main(primaryStage, imageNames); //rerun the main method, removing the image from the repository
         });
 
         selectAll.setOnAction(actionEvent -> {
             for(int x = 0; x < toggleButtons.size(); x++) {
-                toggleButtons.get(x).setSelected(true);
+                toggleButtons.get(x).setSelected(true); //select all the buttons
                 toggleButtons.get(x).setStyle("-fx-background-color: lightskyblue");
             }
         });
 
         deselectAll.setOnAction(actionEvent -> {
             for(int x = 0; x < toggleButtons.size(); x++) {
-                toggleButtons.get(x).setSelected(false);
+                toggleButtons.get(x).setSelected(false); //deselect all the buttons
                 toggleButtons.get(x).setStyle("-fx-background-color:white");
             }
         });
 
-        for(int i = 0; i < imageNames.size(); i += 3){
+        for(int i = 0; i < imageNames.size(); i += 3){ //here we group up the images in groups of 3
 
             HBox temp = new HBox(10);
 
             temp.getChildren().add(toggleButtons.get(i));
 
-            if(imageNames.size()-i>=3 || (imageNames.size()-i)==2) {
+            if(imageNames.size()-i>=3 || (imageNames.size()-i)==2) { //we verify whether or not there are at least 2 images in the last group
                 temp.getChildren().add(toggleButtons.get(i+1));
             }
-            if(imageNames.size()-i>=3 || (imageNames.size()-i)==3) {
+            if(imageNames.size()-i>=3 || (imageNames.size()-i)==3) { //we verify whether or not there are 3 images in the last group
                 temp.getChildren().add(toggleButtons.get(i+2));
             }
 
@@ -199,13 +202,13 @@ public class Main extends Application {
         ImageView whiteBackground = new ImageView(new Image("Images/white-background.jpg"));
         whiteBackground.setFitWidth(982);
 
-        if(imageNames.size()==0){
+        if(imageNames.size()==0){ //make sure the background stays white even with no images
             whiteBackground.setFitHeight(840);
             vBox.getChildren().add(whiteBackground);
-        }else if(imageNames.size()<=3){
+        }else if(imageNames.size()<=3){ //make sure the background stays white even with no more than 3 images
             whiteBackground.setFitHeight(560);
             vBox.getChildren().add(whiteBackground);
-        }else if(imageNames.size()<=6){
+        }else if(imageNames.size()<=6){ //make sure the background stays white even with no more than 6 images
             whiteBackground.setFitHeight(280);
             vBox.getChildren().add(whiteBackground);
         }

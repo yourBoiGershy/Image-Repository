@@ -1,0 +1,7 @@
+	This is a quick document focusing on what I would've done differently if I had more time to work on the project.
+
+	First off, I'd create a database to store all the images in. Not only would this change my repository from being a one-time use one to a permenantly standing one, but it would also allow me to add a search mechanism into the program. 
+Without a database, it becomes very difficult to create a search engine that remembers all the images before the search, so that when the user wants to remove the search filter, they can then come back to what they had previously created. I would've
+also focused on creating a log in with different access keys and codes that users could use to safeguard their images and repositories. 
+
+	Regardless of the application results, I will likely keep working on this project. Let me know if you'd be interested in seeing my final result in the upcoming months.
